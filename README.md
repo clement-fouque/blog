@@ -32,6 +32,8 @@ Add the following content to the newly created file `module.toml`
 path = "github.com/jpanther/congo/v2"
 ```
 
-Launch the site by executing `hugo server`. It'll download the different modules.
+To have the source code close to our project, we can add it as a submodule `git submodule add https://github.com/jpanther/congo.git themes/congo`
 
-git submodule add https://github.com/jpanther/congo.git themes/congo
+Copy all `config/_default/*.toml` files from the source theme and past it into `config/_default/`. **Do not erase** `module.toml` file that we created before.
+
+### Basic configuration
