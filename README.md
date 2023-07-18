@@ -37,3 +37,5 @@ To have the source code close to our project, we can add it as a submodule `git 
 Copy all `config/_default/*.toml` files from the source theme and past it into `config/_default/`. **Do not erase** `module.toml` file that we created before.
 
 ### Basic configuration
+Refer to the documentation https://jpanther.github.io/congo/docs/configuration/
+
