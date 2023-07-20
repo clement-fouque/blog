@@ -1,5 +1,5 @@
 ---
-title: "Clément Fouque's blog"
+title: "A blog for Vulnerablity Management Professionals"
 description: "Learn how to use Congo and its features."
 
 cascade:
@@ -10,10 +10,10 @@ cascade:
   invertPagination: true
 ---
 
-{{< lead >}}
+<!-- {{< lead >}}
 The blog for Vulnerablity Management Professionals
 {{< /lead >}}
 
 _Special thanks to [Katerina Limpitsouni](https://ninalimpi.com) for the excellent illustrations that are used throughout these docs!_
 
----
+--- -->
