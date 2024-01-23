@@ -1,67 +1,95 @@
 ---
-title: "Pros and Cons of vulnerability scanning methods"
+title: "Exploring vulnerability scanning methods: pros and cons"
 date: 2023-07-20T12:29:57Z
 draft: true
 ---
 
-Choosing the right scanning methods is critical in the success of a vulnerability management program. Each method has its own advantages and disadvanatges. One might better suits in one environment/context and not in another. Those scanning methods are not mutually exclusive. 
+Choosing the right scanning methods is critical for the success of a vulnerability management program. Each method has its own advantages and disadvantages, and some might be better suited to one environment/context than another. These scanning methods are not mutually exclusive. 
 
-I'll go through each scanning method by defining the pros and cons. Then I'll provide my recommendation in regards to environments specificities. 
+Let's delve into each scanning method, defining the pros and cons for better understanding, and then provide recommendations based on specific environment requirements.
 
 ## Types of scanning methods
-### Network based scans
-An unthenticated scan is launch from the vulnerability scanner and is going through a list of IPs or asset names, one after the other (there might be concurrency). It can scan different type of assets (network, servers, workstations, ...).
-
-> There might some scanners that will perform unauthenticated scan if authentication is failing. 
+### Unauthenticated scans
+An unauthenticated scan involves probing and testing a system or application without using any login credentials or authentication.
 
 #### Pros
+
 | Title | Details |
 |--|--|
-| Fairly easy to implement | It's the easiest and quickest scanning method to implement a scan. We don't need to know the environment well to configure and launch it. We just have to configure the ip range(s) and or domain(s) and we are ready to go. 
-| Best for asset discovery | As it doesn't have prerequisites such as account access or a software installed, it's excellent to discover assets on the network. It's excellent for scanning the external surface as we often have limited/reduced knowlege of the whole perimeter.
-| (Unauthenticated) View of an external actor | Due to its nature, we can get the same information as an attacker would have. Findings from an unauthenticated scan should increase the priority of the remediations |
-| No agent installed | IT teams are often reluctant to install an agent on their systems. They're more willing to provide an account
-| Full visibility on the asset (Authenticated) | As the account used for the scanning has full access on the asset, it'll be able to identify vulnerabilities locally and retrieve contextual data. 
+| Easy setup | Unauthenticated scans are quick to set up as they don't require any login information or special permissions. |
+| Comprehensive Coverage | Network-based scanning provides an overview of all devices connected to the network, ensuring no potential entry points are overlooked. It's excellent for scanning the external perimeter as we often have limited/reduced knowlege of the whole perimeter.
+| External perspective | Unauthenticated scans mimic the approach of potential attackers, providing insight into the vulnerabilities visible from the outside. |
 
 #### Cons
 | Title | Details |
 |--|--|
-| Network access | As the scan is launched from the vulnerability scanner, you need to manage the network connections between the scanner and assets. In enterprise segmented networks, it's a challenge to maintain this. | 
-| Limited findings and contextual data | As the scanner doesn't have full access to the asset, it'll only detect vulnerabilities that can be discovered externally. A lot of vulnerabilities will be missed. We'll not be able to add contextual data to the asset. |
-Accuracy | Many factors (e.g. network, availability, ...) are affecting the scan results. Two identical scans might come with different results |
-| Network and credential management | The scanner will need to have access to all assets of the networks. In some environments, it could a big challenge. If we had the service accounts credential management, it could become a nightmare. If the scanner doesn't have access to the asset, there'll be no findings. |
-| Asset's availability | The asset needs to be up and running at the time the scan is occurring. For asset type like workstations, it's challenge as people usually turn off their endpoint at the end of the day. It's impossible to know if the asset is down or if there was a connection issue. |
-| Troubleshooting | When there are performance issues, the first thing that is checked is if a scan was running. As the scheduling is not really precised, it makes troubleshooting harder as we have to go through the scan logs to see if and when an asset was scanned. |
+| Limited visibility | Without proper credentials, the scan may miss some internal vulnerabilities and misreport certain findings. |
+| Performance impact | Depending on the scanner's settings, authenticated scans might have a significant impact on the systems due to increased activity during the scan. |
+| Accuracy | Factors like network conditions and asset availability can affect the scan results, leading to varying outcomes even for identical scans (e.g Workstations are often turned off outside working hours)|
+| Troubleshooting | The lack of precise scheduling in authenticated scans can complicate troubleshooting efforts, as it requires going through scan logs to identify when an asset was scanned. |
+
+### Authenticated scans
+An authenticated scan involves using valid credentials to access the target system or application, allowing the scanner to perform a more comprehensive assessment.
+
+#### Pros
+| Title | Details |
+|--|--|
+| Fairly easy setup |  |
+| Detailed Results | Authenticated scans can provide more detailed information about vulnerabilities within the system, including configuration issues and software-specific weaknesses. |
+| No agent installed | IT teams are often reluctant to install an agent on their systems, making authenticated scans a common option.
+
+#### Cons
+| Title | Details |
+|--|--|
+| Credential management | Managing and storing credentials securely can be challenging, as they provide significant access to the target systems. |
+| Performance impact | Similar to unauthenticated scans, authenticated scans might have a significant impact on the systems due to increased activity during the scan. |
+| Accuracy | Factors like network conditions and asset availability can affect the scan results, leading to varying outcomes even for identical scans (e.g Workstations are often turned off outside working hours)|
+| Troubleshooting | The lack of precise scheduling in authenticated scans can complicate troubleshooting efforts, as it requires going through scan logs to identify when an asset was scanned. |
 
 ### Agent-based scans
-An agent is installed on every asset and the configuration is managed from a centralized console. The agent is scanning the asset at specific intervals (every 4 hours, daily, ...) and is pushing the results to the console.
+Agent-based scanning involves installing a specialized software agent on each target system that continuously monitors and reports vulnerabilities to a centralized management console.
 
 #### Pros
 | Title | Details |
 |--|--|
-| Accuracy | We know that at each interval the scan is launched, we'll have the latest data. If there is no data, it means the asset is unavailable or the service is stopped/crashed.
-| Troubleshooting|  |
-| Network access | We only have to manage the outbound connection (from the asset to the scanner console). It usually has less constraints than inbound connections. 
+| Real-Time monitoring | Agent-based scans offer real-time monitoring and continuous assessment of vulnerabilities, providing immediate alerts for new threats. |
+| Troubleshooting| Agent-based scans can simplify troubleshooting efforts by providing real-time data directly from the agents. |
+| Easy architecture | Managing outbound connections (from the asset to the scanner console) is often easier than handling inbound connections, simplifying network setup.
+| Scan duration | All agents can simultaneously scan, reducing the overall scan duration.
+| No rescan needed | Agents continuously monitor, eliminating the need for frequent rescanning.|
+| Performance impact | Agent are lightweigth and the extension of the scan duration to limit the load will not impact the overall scan duration| 
 
 #### Cons
 | Title | Details |
 |--|--|
-| Accuracy | | 
-| Troubleshooting | |
+| Deployment Overhead | Installing and maintaining agents on each system can be time-consuming and resource-intensive, especially in large-scale environments. | 
+| Agent Compatibility | Ensuring agent compatibility with various operating systems and applications can be challenging, potentially leading to limitations in coverage. | 
+| | Adds additional software components to the environment, which could introduce vulnerabilities or performance issues. 
 
-### Agentless scans (cloud only)
+### Agentless scans
+Agentless scanning involves conducting vulnerability assessments without installing any additional software on the target systems. Instead, it relies on existing protocols and network communication to gather information.
 
 #### Pros
 | Title | Details |
 |--|--|
-| Deployment's speed | |
-| Troubleshooting | |
+| Easy deployment | Agentless scans are easy to deploy since they do not require any installation on the target systems. |
+| Lower resource usage | Without agents, there is no ongoing overhead on system resources, reducing the impact on performance. |
+| Reduced security risks | Since there are no additional agents, potential vulnerabilities associated with them are eliminated. |
 
 #### Cons
 | Title | Details |
 |--|--|
-| Cloud only | |
-| Architecture | |
+| Cloud only | Available in the cloud only and usually only on the main ones (AWS, Azure, and GCP). |
+| Architecture | Depending on the solution, it could be quite complex to configure a scanner per region. |
+| Cost in large environment | The cost of a snapshot to perform the scan and the network transfer fees might explode costs. |
+| Limited Visibility | Agentless scans may lack some of the deeper insights into vulnerabilities that can be obtained through agent-based scans. |
+
+## Other considerations
+- False positive: unauthenticted scans are more prone to false-positive. However, it's highly dependant on the vulnerability scanner.
+- Scan duration: A network scan is scanning assets in sequential mode. Concurrency can be increase to reduce the time with the risk of performing a denial of service on the asset. The scan will be complete when all assets will be scanned. For an agent-based scan, all agents can scan at the time and report vulnerabilities to the scanner. The duration is reduced with agent-based scans.
+- Architecture: depending on 
+- Costs
+- Why is the performance better with an agent rather than with network scans ?
 
 ## Pros and cons
 | Scan method | Pros | Cons | Best for
@@ -71,4 +99,7 @@ An agent is installed on every asset and the configuration is managed from a cen
 
 
 ## References
+- https://www.aquasec.com/cloud-native-academy/cspm/agentless-vs-agent-based-security/
+- https://learn.microsoft.com/en-us/azure/defender-for-cloud/concept-agentless-data-collection
 
+Happy scanning!
